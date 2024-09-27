@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surprise Letter</title>
+    <style>
+        /* Ensures the entire image fits the screen without scrolling */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        /* Setting the background to the collage image */
+        body {
+            background-image: url('Being_us.jpg');
+            background-size: contain; /* Ensures the whole image fits within the screen */
+            background-position: center; /* Center the image on the screen */
+            background-repeat: no-repeat; /* Avoid repeating the image */
+            background-color: #e91414; /* Set a background color in case the image doesn’t fully cover */
+        }
+
+        /* Letter container positioned on the white space */
+        .letter-container {
+            display: none; /* Initially hidden */
+            position: absolute;
+            top: 33%; /* Adjusted position for the white space */
+            left: 50%; /* Centering */
+            transform: translate(-50%, -50%); /* Adjusting position to center */
+            width: 21%; /* Width of the letter container (narrower for vertical) */
+            height: 66%; /* Height of the letter container (taller for vertical) */
+            background-color: rgba(242, 16, 182, 0.9); /* Slight transparency */
+            padding: 20px;
+            overflow-y: auto; /* Allow scrolling if text is long */
+            text-align: justify;
+            font-size: 1.2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Buttons for navigation */
+        .nav-button {
+            position: fixed; /* Fixed positioning */
+            bottom: 20px;
+            background-color: #f1f1f1;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 50%; /* Rounded corners */
+            font-size: 1.5rem;
+            width: 50px; /* Button width */
+            height: 50px; /* Button height */
+            display: none; /* Initially hidden */
+        }
+
+        .nav-button:hover {
+            background-color: #ccc;
+        }
+
+        .left-button {
+            left: 20px;
+        }
+
+        .right-button {
+            right: 20px;
+        }
+
+        /* Yes button */
+        .yes-button {
+            position: absolute;
+            right: 20px; /* Align to the right */
+            top: 50%; /* Center vertically */
+            transform: translateY(-50%); /* Adjust position to center */
+            background-color: #4CAF50; /* Green */
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            border-radius: 5px;
+        }
+
+        .yes-button:hover {
+            background-color: #45a049; /* Darker green */
+        }
+
+        /* Text above the button */
+        .prompt-text {
+            position: absolute;
+            right: 20px; /* Align to the right */
+            top: calc(50% - 80px); /* Position above the button */
+            font-size: 1.5rem;
+            color: white;
+            text-align: right; /* Align text to the right */
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Prompt text -->
+    <div class="prompt-text">Are you ready for the surprise?</div>
+
+    <!-- Yes button -->
+    <button class="yes-button" onclick="showLetter()">Yes, I am ready</button>
+
+    <!-- Letter container -->
+    <div class="letter-container" id="letterContainer">
+        <div id="letterText"></div>
+    </div>
+
+    <!-- Navigation buttons -->
+    <button class="nav-button left-button" onclick="previousPage()">&#10094;</button>
+    <button class="nav-button right-button" onclick="nextPage()">&#10095;</button>
+
+    <script type="text/javascript">
+        let currentPage = 0;
+
+        // Hardcoded letter text split into parts for navigation
+        const letterParts = [
+            `Hey Apeksha, 
+            Athavla he pahila text message jo mi tula kela hota almost 1 oct la. ho ho athavlach asel ani ka nahi athavnar mich sarkha sarkha to vishay kadhat asto boltana so Apeksha almost 1 varsha hoyeel aplyala bolun ek mekana olalkhiche hovun eka varshat khup kahi badalla aplyatla ek mekana anolkhi ase apn deghe ek mekana olkhayla laglo adhi maitri zali apli changli. tasa tuzya ayushyat mitranchi kami navtich tula khup jn hote kharach bolayla pn apla te roj tas don tas bolta aplya doghanchya itka savayicha zala na ki ek diwas call nahi kela tr tula pn rahavat nasaycha ani mala rahavat nasaycha. tasa mazya manat tula patvaycha hotach pn adhi tula janun ghevun mg te karaycha asa tharavla hota ani kela pn tasach pn tuzyashi roj bolta bolta tula olakhta olakhta mazyatla changla version tu baher kadhlas asa mala vatta.`,
+            `Malahi mahit nahi mi tuzyashi bolta bolta tuzyashi evdha attach zalo maza malach nahi kalal khara sangaycha tr ya adhi evdha mi kunashich  attach navto zalo. he asa attach hona kahi jn changla mhantat ani kahi jn vait aso. Tar aplya ya 1 varshyachya attaparyantachya prawasamadhe survaticha kal khup mst gela tyanantr  apn ek mekanchya premat padlo mg to ek sundar kal hota jeva apn ek mekana bhetayla kiti prayatna karaycho ata pn kartoch pn tevach jara vegla hota sagla navin navin hota apla te ekatra basun bhavishyatli swapna rangavna hatat hat ghevun firna, ayushyat pahilyanda movie date vr gelo pn mazya sakhya bahinila ghevun asa karnara ek mev mulga asen mi jagat. nantr sobat holi la rang lavna ek mekana tuzya birthday la tuzyasobat vel ghalavna roj ratriche aple video calls ha sagla kal athavla na ki kharach asa vatta ki lavkar gela ha kal.`,
+
+            `\n\nTyanatr mg may be aplya natyat chadh utar yayla survat zali ani te problems external parameters mule hote pn yamule apla relationship khup suffer zala aso vait kalachi athavan keli tari angavr kata yeto kharach. pan Apeksha ek matra na mhanav lagel ki tu ek khup motha ghav dilas ya eka varshat mala jyacha khup kholvar parinam zala g tuzyavr mazyavr especially aplya relationship var. Tula dosh det nahiye yasathi pan aaj sudha ganpati madhle te diwas athavle ki radu yeta, ky awastha hoti mazi 2 diwas lagle mala kalayla ki apla relationship tutla ahe mhanun. pan tya kalani pn khup kahi shikavla mala jasa ki aplya swapnacha sheesh mahal bandhla ki koni jari chotasa dagad marla to kshanat futun jau shakto ani tech zala hota teva.`,
+            `\n\nI know he letter khup special occasion mhanun mi lihit ahe pn ha ek emotional part ahe tyat pn mazya manat khup kahi ahe g ani te bolaychi sudha ata mala bhiti vatte ki konta ek point tu dharshil ani ajun ky tr hoyeel. mi itka tya divsapasun affect zaloy ki mala pudhcha imagine karaychi bhiti vatte ata mhanje ho mala tuzyashi lagna karaycha ahe tevdhe efforts dyaychi तयारी pn ahe pn mi je adhi mhanaycho ki apn asa karu lagnanantr tasa karu te mi swatala ata thambvayla lagloy ki nako ata parat ek sheesh mahal bandhus parat koni tari yevun to todun jail. tula nahi mahit Apeksha roj mala bhiti vatte tula ayushyatun gamvaychi jeva tu mhantes ki tuzya evdhi deep feeling mala alyashivay mi tula I love you mhannar nahi.`,
+            `Mi tuzyakadun I love you kadhi expect nahi kela pn jeva I love you mi mhanlyavr ek shantata yete na aplyat ti nakoshi vatte. pan yacha artha asa nahiye ki mi he boltoy mhanun tu I love you bolavas. tula jeva vatel teva bol mi vat baghen toparyant. Ani tula mi dar veli ekach sangat asto na ki ghari kalalyavr asa rahava lagel asa react karava lagel te sudha seriously ghe i know tu ghetes pn tuzyat te badal ghadvun anave lagtil. ekach goshta ahe Apeksha tuzyavr prem karnari loka yetil tuzya ayushyat pan tuza jyachyavr prem ahe tya vyakti ch pn tuzyavr prem ahe ashi vyakti tula sarkhi milel Kiva milnar nahi sangta yet nahi. I know tuze Aai baba tuzyavr prem kartat tu pn tyanchyavr kartes but jeva ti vel yeel teva tula mala ani tyana same weightage dyava lagel. tyanchyapeksha maza sthan khalchach ahe ani mala te manya pn ahe pn tyasathi tuzya premacha tu udya bali dyavas asa nako karus hee evdhich mazi icha ahe.`,
+            `swatala tya situation sathi tayar kr ani apla prem successful honyasathi tula ky karta yeel to vichar kar ani te kar mg tula to deepness feel hoyeel. nahitr ayushyabhar tu deepness yaychi vatach pahat basashil. tar tuzyasathi aslela he so called lecture bas zala ata parat changlya part kade valuyat. 
+			Tar Apeksha punyachya trip baddal ky mhanaycha ahe tula I know tu adhich bolli ahes ki te 4 diwas tuzya ayushyatle saglyat bhari diwas hote tasech mazya ayushyatle pn te saglyat memorable diwas hote. Tuzyasobat te ekach room madhe tula mithit ghevun zopna, ratri tuzyasobat hatat hat ghevun long walk vr jana even apla bike varun firna, Rihegao dam la jatana tuza planning karna ki apn na itha ek ghar ghevuyat ani itha rahuyat, aplya doghanmadhle te najuk kshan sagla sagla asa athavta kharach jr kadhi devani kiva koni vicharla ki tuzi shevatchi icha ky asel tr mi tr te char diwas mala parat tuzyasobat jagayche ahet hich icha magen mi dewala.`,
+            `tula mahiti kadhi kadhi vatta na ki mi tuzya yogya nahi ky ahe mazyakade ek sadha nokri karnara mulga ani tu ek future doctor kharach jr tu kontya doctor la choose kela astas tr nakkich jo struggle tula karava lagel pudhe jaun to karava lagnar nahi pn tari pn tu mala choose kelas, i know ki tuzyakade kharach mazyapeksha better options hote pn tu mala choose kelas. Mi nehmi swatala na lucky samajto ani devache abhar manto ki mala tyani ek asa ayushya dila ahe je jagaychi icha lok kartat. maze Baba Aai Nupur Mavshi Kaka Kaku saglya bahini mazyashi ashya friendly rahtat ani jr mi nit kiva kahi weird vaglo nahi tr tyana maza kahi binasla ahe asa vatta maza weird vagna tyana mi normal aslyacha signal ahe ase he maze gharche ani ekikade tu jichyakade mazyapeksha best option astana sudha tuza mazyasobat asna so mhanun mi jagatla saglyat lucky manus ahe asa mala vatta.`,
+            `Tu mhantes na ki tula evdhi deepness vatte tashi mala ka nahi vatat maza asa mat ahe ki mi mazya feelings express karayla khup changla shiklo ahe ani je ki tula karta yet nahi kiva tu swatala thambavtes. ata hech bg na he mi letter lihla Kiva he asa surprise tula det ahe khup sadha ahe but tuza asel ki bg tu kiti mazya premat ahe mala ka asa nahi hot mala ka tuzyasathi asa karu vatat nahi n all pn yar he person to person differ karta na. Bag tu tuzya Aai cha bday visartes even tilach tula athavun dyava lagta ki maza bday ahe maza status thev. tech tuzyas birthday la tya tasa kartat ka tyana to lakshat asto ani tula tya wish pn kartat but yacha artha asa nahiye na ki tuzyav tyanchyavr prem nahiye kica kami ahe. Tu jya vatavarnamadhe vadhli ahes tyapramane tu zali ahes mazya gharatla vatavaran vegla ahe tya pramane mi asa prem rag dukh vyakta karu shakto he evdhach mala vatta.`,
+            `\n\nBaki last evdhach sangen jar tula asa vatta ki te 4 diwas je apn ekatra hoto tech jr tula 40 50 varshat convert karavet asa manoman vatta tr tula yar tasa strong vava lagel bg kahi vela sathi tras hoyeel pn sagla nit hoyeel velepramane so be strong be lovable my sweetheart 😘 \n\n#Apekshik\n\nYours Lovingly\nKaushik`
+            
+        ];
+
+        function showLetter() {
+            document.getElementById('letterContainer').style.display = 'block';
+            document.querySelector('.yes-button').style.display = 'none';
+            document.querySelector('.prompt-text').style.display = 'none';
+            showCurrentPage();
+            document.querySelector('.nav-button.left-button').style.display = 'block';
+            document.querySelector('.nav-button.right-button').style.display = 'block';
+        }
+
+        function showCurrentPage() {
+            document.getElementById('letterText').innerText = letterParts[currentPage];
+        }
+
+        function nextPage() {
+            if (currentPage < letterParts.length - 1) {
+                currentPage++;
+                showCurrentPage();
+            }
+        }
+
+        function previousPage() {
+            if (currentPage > 0) {
+                currentPage--;
+                showCurrentPage();
+            }
+        }
+    </script>
+
+</body>
+
+</html>
